@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filemanager-dpl
+  labels:
+    app: filemanager-app
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: filemanager-app
+  template:
+    metadata:
+      labels:
+        app: filemanager-app
+    spec:
+      containers:
+        - name: filemanager-ctn
+          image: rodrigojbcs/file-manager-server:202306252232-9a72147
+          ports:
+            - containerPort: 8000
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "100Mi"
+              cpu: "5m"
+            limits:
+              memory: "256Mi"
+              cpu: "20m"
+          startupProbe:
+            httpGet:
+              path: /ping
+              port: 8000
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 8000
+            periodSeconds: 5
+            failureThreshold: 2
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 8000

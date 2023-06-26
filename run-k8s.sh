@@ -1,6 +1,4 @@
-docker build -t file-manager-server/alpine-ms .
+# Check that kubectl is installed.
+which kubectl > /dev/null || { echo 'ERROR: kubectl is not installed' ; exit 1; }
 
-docker container run -it --rm \
-    --name file-manager-server \
-    -p 8000:8000 \
-    file-manager-server/alpine-ms:latest
+kubectl apply -f kube

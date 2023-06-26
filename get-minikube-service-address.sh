@@ -1,0 +1,1 @@
+minikube service filemanager-svc --url

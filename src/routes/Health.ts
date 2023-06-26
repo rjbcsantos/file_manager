@@ -5,4 +5,6 @@ const healthRouter = express.Router();
 
 healthRouter.get("/ping", HealthController.getPingResponse);
 
+healthRouter.get('/readiness', HealthController.isServiceReady)
+
 export default healthRouter
