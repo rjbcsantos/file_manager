@@ -3,12 +3,7 @@ import { FileManagerService } from "../services/FileManager";
 import { UploadedFile } from "express-fileupload";
 import { matchedData, validationResult } from "express-validator";
 import { NotFoundError } from "../exceptions/NotFoundError";
-
-
-function getErrorMessage(error: unknown) {
-    if (error instanceof Error) return error.message
-    return String(error)
-}
+import { getErrorMessage } from "../utils/ExceptionUtils";
 
 const uploadFile = async (req: Request, res: Response) => {
     const result = validationResult(req);

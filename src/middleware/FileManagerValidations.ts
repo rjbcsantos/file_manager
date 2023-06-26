@@ -8,10 +8,6 @@ const expectedExtensions = [".gz"];
 const expectedFileType = ["gzip"];
 
 const validateUploadedFile = (req: Request, res: Response, next: NextFunction) => {
-    if (!req.files) {
-        return res.status(400).send('No files were uploaded.');
-    }
-
     if (!req.files?.uploadedFile) {
         return res.status(400).send('UploadedFile field cannot be empty.');
     }

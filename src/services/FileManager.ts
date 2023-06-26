@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 
 import { existsSync } from "node:fs"
@@ -8,16 +7,9 @@ import { NotFoundError } from "../exceptions/NotFoundError";
 
 const tempDir = os.tmpdir();
 
-const uploadFile = async (file: UploadedFile, newFileName?: string): Promise<void> => {
-    const fileName = newFileName ?? file.name;
-    const fullPath = path.join(tempDir, fileName);
-
-    if (existsSync(fullPath)) {
-        console.warn(`The file ${fileName} already exists and will be overwritten.`);
-    }
-
+const moveFile = (file: UploadedFile, destination: string) => {
     return new Promise<void>((resolve, reject) => {
-        file.mv(fullPath, ((error) => {
+        file.mv(destination, ((error) => {
             if (!!error) {
                 const errorMessage = "An internal error occurred while copying the file.";
                 reject(new Error(errorMessage));
@@ -26,6 +18,17 @@ const uploadFile = async (file: UploadedFile, newFileName?: string): Promise<voi
             }
         }));
     });
+}
+
+const uploadFile = async (file: UploadedFile, newFileName?: string): Promise<void> => {
+    const fileName = newFileName ?? file.name;
+    const fullPath = path.join(tempDir, fileName);
+
+    if (existsSync(fullPath)) {
+        console.warn(`The file ${fileName} already exists and will be overwritten.`);
+    }
+
+    return moveFile(file, fullPath);
 }
 
 const getFileFullPathToDownload = async (fileName: string): Promise<string> => {
